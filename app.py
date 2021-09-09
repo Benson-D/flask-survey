@@ -16,7 +16,8 @@ responses = []
 
 @app.get('/')
 def start_survey(): 
-    """Open the survey, retrieve survey.title, and survey.instructions"""
+    """Open the survey, retrieve title, and instructions"""
+
     title = survey.title 
     instructions = survey.instructions
 
@@ -24,26 +25,45 @@ def start_survey():
 
 @app.post('/begin')
 def show_questions():
-    """Redirect user after starting survey"""
+    """Redirect user to first question"""
 
     return redirect('/questions/0')
 
 
-@app.get('/questions/0')
-def questions_pages():
+@app.get('/questions/<int:question>')
+def questions_pages(question):
 
-    """Set up docstring"""
-    breakpoint()
+    """Load up survey.questions, display the choices for answers, each havin a radio button"""
+    #breakpoint()
 
-    return render_template('/question.html', question = survey.questions[0]) #survey.questions[question] -> question.question would work
+    return render_template('/question.html', question=survey.questions[question]) 
 
-# @app.post('/answer')
-# def question_answer():
-#     """"""
-#     # take current question url #
-#     # increase the question url # by 1 until length
 
-#     if (question < 4):
-#         question += 1
+@app.post('/answer')
+def handle_answers():
+    """Append answer to response lst, redirect to next question route, else completion route"""
+    
+    # Get value from form in question.html, append to responses
+    form_answer = request.form["answer"]
+    responses.append(form_answer)
 
-#     redirect('/questions/')
+    # Variables to compare if equal len
+    question_number = len(responses)
+    survey_length = len(survey.questions)
+
+    # Need to redirect /answer to next question,
+    # Reconfigure questions_pages dynamically
+    # Need to away to compare to allow for redirection
+    # If no more response redirect to /completion
+
+    if (question_number < survey_length ):
+        return redirect(f"/questions/{question_number}")
+    else: 
+        return redirect('/completion')
+    #breakpoint()
+
+@app.get('/completion')
+def completed_survey():
+    """When survey finished render to completion.html"""
+    return render_template('completion.html')
+
