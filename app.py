@@ -22,9 +22,28 @@ def start_survey():
 
     return render_template('/survey_start.html', title=title, instructions=instructions)
 
-@app.get('/questions/<question>')
-def questions_pages(question):
+@app.post('/begin')
+def show_questions():
+    """Redirect user after starting survey"""
+
+    return redirect('/questions/0')
+
+
+@app.get('/questions/0')
+def questions_pages():
 
     """Set up docstring"""
+    breakpoint()
 
-    return '' 
+    return render_template('/question.html', question = survey.questions[0]) #survey.questions[question] -> question.question would work
+
+# @app.post('/answer')
+# def question_answer():
+#     """"""
+#     # take current question url #
+#     # increase the question url # by 1 until length
+
+#     if (question < 4):
+#         question += 1
+
+#     redirect('/questions/')
