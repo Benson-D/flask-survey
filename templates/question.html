@@ -4,6 +4,10 @@
 
 <form action="/answer" method="POST">
   <!-- you should have one item like this for every choice -->
+  {% for msg in get_flashed_messages() %}
+  <h2>{{ msg }}</h2>
+  {% endfor %}
+
   {% for choice in question.choices %}
   <p>
     {{choice}}
