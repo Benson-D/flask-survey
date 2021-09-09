@@ -19,10 +19,10 @@ debug = DebugToolbarExtension(app)
 def start_survey(): 
     """Open the survey, retrieve title, and instructions from survey class"""
 
-    title = survey.title 
+    title = survey.title # not necessary, could just pass in as is
     instructions = survey.instructions
 
-    session['responses'] = []
+    session['responses'] = [] # move to app.post('/begin')
 
     return render_template('/survey_start.html', title=title, instructions=instructions)
 
@@ -46,7 +46,7 @@ def questions_pages(question):
 
     check_response = len(session['responses'])
 
-    if(question < check_response or question > check_response):
+    if(question < check_response or question > check_response): # could change to if/else format
         flash('Please answer this question before moving on!')
         return redirect(f'/questions/{check_response}')
 
@@ -62,7 +62,7 @@ def handle_answers():
     # form_answer = request.form["answer"]
     # responses.append(form_answer)
 
-    form_answer = request.form['answer']
+    form_answer = request.form['answer'] #better to be more descriptive about what is being pulled
     responses = session['responses']
     responses.append(form_answer)
     session['responses'] = responses
